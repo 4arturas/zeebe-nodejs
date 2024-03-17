@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0z6fmyo" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.20.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.4.0">
+  <bpmn:process id="physics-1" name="Physics 1" isExecutable="true">
+    <bpmn:documentation>https://www.youtube.com/watch?v=W6ZiyhFmk90&amp;list=PLX2gX-ftPVXVCw9WxxEA4yD14k8yskTSj&amp;index=49</bpmn:documentation>
+    <bpmn:extensionElements>
+      <zeebe:properties />
+    </bpmn:extensionElements>
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>Flow_0i598sw</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_0i598sw" sourceRef="StartEvent_1" targetRef="Gateway_1lqu9rg" />
+    <bpmn:endEvent id="Event_1hfpx92">
+      <bpmn:extensionElements />
+      <bpmn:incoming>Flow_0vo55vm</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:subProcess id="Activity_12sdamt" name="Prepare Variables For Quadratic Calculations">
+      <bpmn:incoming>Flow_1ea7g2j</bpmn:incoming>
+      <bpmn:outgoing>Flow_0fekhck</bpmn:outgoing>
+      <bpmn:startEvent id="Event_0pgzchp">
+        <bpmn:outgoing>Flow_0xqbmyq</bpmn:outgoing>
+      </bpmn:startEvent>
+      <bpmn:sequenceFlow id="Flow_0xqbmyq" sourceRef="Event_0pgzchp" targetRef="Activity_1ec82aq" />
+      <bpmn:scriptTask id="Activity_1ec82aq" name="a">
+        <bpmn:extensionElements>
+          <zeebe:script expression="=1/2*(-9.8)" resultVariable="a" />
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_0xqbmyq</bpmn:incoming>
+        <bpmn:outgoing>Flow_1cnk6ve</bpmn:outgoing>
+      </bpmn:scriptTask>
+      <bpmn:sequenceFlow id="Flow_1cnk6ve" sourceRef="Activity_1ec82aq" targetRef="Activity_0g564pj" />
+      <bpmn:scriptTask id="Activity_0g564pj" name="b">
+        <bpmn:extensionElements>
+          <zeebe:script expression="=velocityVectorY" resultVariable="b" />
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_1cnk6ve</bpmn:incoming>
+        <bpmn:outgoing>Flow_0v4mri3</bpmn:outgoing>
+      </bpmn:scriptTask>
+      <bpmn:sequenceFlow id="Flow_0v4mri3" sourceRef="Activity_0g564pj" targetRef="Activity_0muvhdg" />
+      <bpmn:scriptTask id="Activity_0muvhdg" name="c">
+        <bpmn:extensionElements>
+          <zeebe:script expression="=height" resultVariable="c" />
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_0v4mri3</bpmn:incoming>
+        <bpmn:outgoing>Flow_0g5yv8y</bpmn:outgoing>
+      </bpmn:scriptTask>
+      <bpmn:endEvent id="Event_13ekfcu">
+        <bpmn:incoming>Flow_0pmwh69</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:sequenceFlow id="Flow_0g5yv8y" sourceRef="Activity_0muvhdg" targetRef="Activity_05tei05" />
+      <bpmn:scriptTask id="Activity_05tei05" name="Quadratic Formula Sign">
+        <bpmn:extensionElements>
+          <zeebe:script expression="=(1)" resultVariable="quadraticFormulaSign" />
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_0g5yv8y</bpmn:incoming>
+        <bpmn:outgoing>Flow_0pmwh69</bpmn:outgoing>
+      </bpmn:scriptTask>
+      <bpmn:sequenceFlow id="Flow_0pmwh69" sourceRef="Activity_05tei05" targetRef="Event_13ekfcu" />
+    </bpmn:subProcess>
+    <bpmn:sequenceFlow id="Flow_0fekhck" sourceRef="Activity_12sdamt" targetRef="Activity_0jwkwe8" />
+    <bpmn:scriptTask id="Activity_0jwkwe8" name="Calculate Time In The Air">
+      <bpmn:extensionElements>
+        <zeebe:script expression="=(-b+((quadraticFormulaSign)*sqrt((b*b)-4*a*c)))/(2*a)" resultVariable="timeInTheAir" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0fekhck</bpmn:incoming>
+      <bpmn:incoming>Flow_0idfv14</bpmn:incoming>
+      <bpmn:outgoing>Flow_0r58uj1</bpmn:outgoing>
+    </bpmn:scriptTask>
+    <bpmn:sequenceFlow id="Flow_0r58uj1" sourceRef="Activity_0jwkwe8" targetRef="Gateway_1d24k3c" />
+    <bpmn:exclusiveGateway id="Gateway_1d24k3c">
+      <bpmn:incoming>Flow_0r58uj1</bpmn:incoming>
+      <bpmn:outgoing>Flow_1jim1nv</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1doi9si</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_1jim1nv" sourceRef="Gateway_1d24k3c" targetRef="Activity_1qj9yke">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=timeInTheAir &gt;= 0</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1doi9si" sourceRef="Gateway_1d24k3c" targetRef="Activity_0hmriq5">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=timeInTheAir&lt;0</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0idfv14" sourceRef="Activity_0hmriq5" targetRef="Activity_0jwkwe8" />
+    <bpmn:scriptTask id="Activity_0hmriq5" name="If time in the air is negative value then we have to switch the sign">
+      <bpmn:extensionElements>
+        <zeebe:script expression="=-1" resultVariable="quadraticFormulaSign" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1doi9si</bpmn:incoming>
+      <bpmn:outgoing>Flow_0idfv14</bpmn:outgoing>
+    </bpmn:scriptTask>
+    <bpmn:sequenceFlow id="Flow_0qvpj09" sourceRef="Activity_1ukqyhn" targetRef="Activity_0xp7jnx" />
+    <bpmn:serviceTask id="Activity_0c489ag" name="Calculate sin">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="sin" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_17nmwy2</bpmn:incoming>
+      <bpmn:outgoing>Flow_18hp475</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="Activity_1ukqyhn" name="Calculate cos">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="cos" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0id8jwd</bpmn:incoming>
+      <bpmn:outgoing>Flow_0qvpj09</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:scriptTask id="Activity_0xp7jnx" name="Calculate velocityVectorX">
+      <bpmn:extensionElements>
+        <zeebe:script expression="=cos*velocityVector" resultVariable="velocityVectorX" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0qvpj09</bpmn:incoming>
+      <bpmn:outgoing>Flow_1ubsx6q</bpmn:outgoing>
+    </bpmn:scriptTask>
+    <bpmn:sequenceFlow id="Flow_18hp475" sourceRef="Activity_0c489ag" targetRef="Activity_080lzvf" />
+    <bpmn:scriptTask id="Activity_080lzvf" name="Calculate velocityVectorY">
+      <bpmn:extensionElements>
+        <zeebe:script expression="=sin*velocityVector" resultVariable="velocityVectorY" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_18hp475</bpmn:incoming>
+      <bpmn:outgoing>Flow_025tzpi</bpmn:outgoing>
+    </bpmn:scriptTask>
+    <bpmn:sequenceFlow id="Flow_0id8jwd" sourceRef="Gateway_1lqu9rg" targetRef="Activity_1ukqyhn" />
+    <bpmn:sequenceFlow id="Flow_17nmwy2" sourceRef="Gateway_1lqu9rg" targetRef="Activity_0c489ag" />
+    <bpmn:sequenceFlow id="Flow_025tzpi" sourceRef="Activity_080lzvf" targetRef="Gateway_0khe9q3" />
+    <bpmn:sequenceFlow id="Flow_1ubsx6q" sourceRef="Activity_0xp7jnx" targetRef="Gateway_0khe9q3" />
+    <bpmn:sequenceFlow id="Flow_1ea7g2j" sourceRef="Gateway_0khe9q3" targetRef="Activity_12sdamt" />
+    <bpmn:parallelGateway id="Gateway_1lqu9rg">
+      <bpmn:incoming>Flow_0i598sw</bpmn:incoming>
+      <bpmn:outgoing>Flow_0id8jwd</bpmn:outgoing>
+      <bpmn:outgoing>Flow_17nmwy2</bpmn:outgoing>
+    </bpmn:parallelGateway>
+    <bpmn:parallelGateway id="Gateway_0khe9q3">
+      <bpmn:incoming>Flow_025tzpi</bpmn:incoming>
+      <bpmn:incoming>Flow_1ubsx6q</bpmn:incoming>
+      <bpmn:outgoing>Flow_1ea7g2j</bpmn:outgoing>
+    </bpmn:parallelGateway>
+    <bpmn:sequenceFlow id="Flow_0vo55vm" sourceRef="Activity_1qj9yke" targetRef="Event_1hfpx92" />
+    <bpmn:scriptTask id="Activity_1qj9yke" name="Calculate Delta X">
+      <bpmn:extensionElements>
+        <zeebe:script expression="=velocityVectorX*timeInTheAir" resultVariable="deltaX" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1jim1nv</bpmn:incoming>
+      <bpmn:outgoing>Flow_0vo55vm</bpmn:outgoing>
+    </bpmn:scriptTask>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="physics-1">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="152" y="219" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1c0vado_di" bpmnElement="Activity_1ukqyhn">
+        <dc:Bounds x="310" y="50" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1gsanyk_di" bpmnElement="Activity_0c489ag">
+        <dc:Bounds x="290" y="370" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_06uzvv7_di" bpmnElement="Activity_080lzvf">
+        <dc:Bounds x="430" y="370" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0465bln_di" bpmnElement="Gateway_1lqu9rg">
+        <dc:Bounds x="224" y="212" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0qqx6mw_di" bpmnElement="Gateway_0khe9q3">
+        <dc:Bounds x="565" y="212" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_03ys9te_di" bpmnElement="Activity_0xp7jnx">
+        <dc:Bounds x="440" y="50" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0oqnugs_di" bpmnElement="Activity_0jwkwe8">
+        <dc:Bounds x="830" y="197" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1d24k3c_di" bpmnElement="Gateway_1d24k3c" isMarkerVisible="true">
+        <dc:Bounds x="975" y="212" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1rg8d9b_di" bpmnElement="Activity_0hmriq5">
+        <dc:Bounds x="950" y="90" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_07m7nzk_di" bpmnElement="Activity_1qj9yke">
+        <dc:Bounds x="1100" y="197" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1hfpx92_di" bpmnElement="Event_1hfpx92">
+        <dc:Bounds x="1252" y="219" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1wm9jxi_di" bpmnElement="Activity_12sdamt">
+        <dc:Bounds x="680" y="197" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0i598sw_di" bpmnElement="Flow_0i598sw">
+        <di:waypoint x="188" y="237" />
+        <di:waypoint x="224" y="237" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0qvpj09_di" bpmnElement="Flow_0qvpj09">
+        <di:waypoint x="410" y="90" />
+        <di:waypoint x="440" y="90" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0id8jwd_di" bpmnElement="Flow_0id8jwd">
+        <di:waypoint x="249" y="212" />
+        <di:waypoint x="249" y="90" />
+        <di:waypoint x="310" y="90" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_18hp475_di" bpmnElement="Flow_18hp475">
+        <di:waypoint x="390" y="410" />
+        <di:waypoint x="430" y="410" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_17nmwy2_di" bpmnElement="Flow_17nmwy2">
+        <di:waypoint x="249" y="262" />
+        <di:waypoint x="249" y="410" />
+        <di:waypoint x="290" y="410" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_025tzpi_di" bpmnElement="Flow_025tzpi">
+        <di:waypoint x="530" y="410" />
+        <di:waypoint x="590" y="410" />
+        <di:waypoint x="590" y="262" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1ubsx6q_di" bpmnElement="Flow_1ubsx6q">
+        <di:waypoint x="540" y="90" />
+        <di:waypoint x="590" y="90" />
+        <di:waypoint x="590" y="212" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1ea7g2j_di" bpmnElement="Flow_1ea7g2j">
+        <di:waypoint x="615" y="237" />
+        <di:waypoint x="680" y="237" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1jim1nv_di" bpmnElement="Flow_1jim1nv">
+        <di:waypoint x="1025" y="237" />
+        <di:waypoint x="1100" y="237" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0fekhck_di" bpmnElement="Flow_0fekhck">
+        <di:waypoint x="780" y="237" />
+        <di:waypoint x="830" y="237" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0idfv14_di" bpmnElement="Flow_0idfv14">
+        <di:waypoint x="950" y="130" />
+        <di:waypoint x="880" y="130" />
+        <di:waypoint x="880" y="197" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0r58uj1_di" bpmnElement="Flow_0r58uj1">
+        <di:waypoint x="930" y="237" />
+        <di:waypoint x="975" y="237" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1doi9si_di" bpmnElement="Flow_1doi9si">
+        <di:waypoint x="1000" y="212" />
+        <di:waypoint x="1000" y="170" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0vo55vm_di" bpmnElement="Flow_0vo55vm">
+        <di:waypoint x="1200" y="237" />
+        <di:waypoint x="1252" y="237" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_077jhif">
+    <bpmndi:BPMNPlane id="BPMNPlane_1ydwdpp" bpmnElement="Activity_12sdamt">
+      <bpmndi:BPMNShape id="Event_0pgzchp_di" bpmnElement="Event_0pgzchp">
+        <dc:Bounds x="152" y="102" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1e4eyo5_di" bpmnElement="Activity_1ec82aq">
+        <dc:Bounds x="240" y="80" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1ik70an_di" bpmnElement="Activity_0g564pj">
+        <dc:Bounds x="400" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_19bctp5_di" bpmnElement="Activity_0muvhdg">
+        <dc:Bounds x="560" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1p6mkmc_di" bpmnElement="Activity_05tei05">
+        <dc:Bounds x="750" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_13ekfcu_di" bpmnElement="Event_13ekfcu">
+        <dc:Bounds x="922" y="102" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0xqbmyq_di" bpmnElement="Flow_0xqbmyq">
+        <di:waypoint x="188" y="120" />
+        <di:waypoint x="240" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1cnk6ve_di" bpmnElement="Flow_1cnk6ve">
+        <di:waypoint x="340" y="120" />
+        <di:waypoint x="400" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0v4mri3_di" bpmnElement="Flow_0v4mri3">
+        <di:waypoint x="500" y="120" />
+        <di:waypoint x="560" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0g5yv8y_di" bpmnElement="Flow_0g5yv8y">
+        <di:waypoint x="660" y="120" />
+        <di:waypoint x="750" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0pmwh69_di" bpmnElement="Flow_0pmwh69">
+        <di:waypoint x="850" y="120" />
+        <di:waypoint x="922" y="120" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
